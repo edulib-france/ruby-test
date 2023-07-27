@@ -1,6 +1,7 @@
 class Worker
     attr_reader :id, :price_per_shift, :shifts, :pay
 
+
     def initialize(id, price_per_shift)
         @id = id
         @price_per_shift = price_per_shift
