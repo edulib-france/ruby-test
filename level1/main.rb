@@ -11,18 +11,10 @@ end
 
 data = JSON.parse(File.read('./level1/data.json'))
 
-workers = data['workers'].map do |worker_data|
-    Worker.new(worker_data['id'], worker_data['price_per_shift'])
-end
-
-shifts = data['shifts'].map do |shift_data|
-    Shift.new(shift_data['user_id'])
-end
-
-workers.each do |worker|
-    worker.number_of_shifts = shifts.count { |shift| shift.user_id == worker.id }
-    worker.calculate_pay
-end
+workers = data['workers'].map { |worker_data| Worker.new(worker_data['id'], worker_data['price_per_shift']) }
+shifts = data['shifts'].map { |shift_data| Shift.new(shift_data['user_id']) }
+shifts.each { |shift| workers.find { |w| w.id == shift.user_id }&.add_shift(shift) }
+workers.each(&:calculate_pay)
 
 # test RSpec
 require 'rspec/autorun'
